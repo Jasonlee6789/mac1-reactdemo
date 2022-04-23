@@ -4,6 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 import logo from "./logo.svg";
 
+interface Job {
+  desc: string;
+  id: string;
+  createTime: number;
+  isSelected: boolean;
+}
 function App() {
   // 任务列表
   const [jobs, setJobs] = useState < Array < Job >> [];
@@ -14,12 +20,6 @@ function App() {
   // 每次输入时当前任务描述
   const [desc, setDesc] = useState("");
 
-  interface Job {
-    desc: string;
-    id: string;
-    createTime: number;
-    isSelected: boolean;
-  }
   //使用 useRef  获得 input 组件的引用,即ref定位到dom的输入框位置，
   const inputRef = useRef < HTMLInputElement > null;
   //input 框在失去焦点后编辑弹窗消失,弹窗出现之后 input 能自动获取焦点的效果
@@ -42,29 +42,62 @@ function App() {
     setDesc("");
   }
 
+  function remove(i: number) {
+    jobs.splice(i, 1);
+    setJobs([...jobs]);
+  }
+
+  function troggleSelected(i: number) {
+    jobs[i].isSelected = !jobs[i].isSelected;
+    setJobs([...jobs]);
+  }
+
   return (
     <div className="App">
-      {show ? (
-        <div className="dialog">
-          <input
-            onChange={(event) => setDesc(event.target.value)}
-            ref={inputRef}
-            placeholder="请输入任务描述"
-            onBlur={() => {
-              setTimeout(() => {
-                setShow(false);
-              }, 0);
-            }}
-          />
-          <div className="create" onClick={add}>
-            创建
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>React-李靖</h1>
+      </header>
+
+      <div className="container">
+        <div className="task-header">
+          <div className="title">进行中的任务</div>
+          <div className="right">...</div>
+        </div>
+        //jobs 表示任务列表，可以根据该数据遍历出整个列表
+        {jobs.map((job, i) => (
+          <div className="job-wrapper" key={job.id}>
+            <div className="selected" onClick={() => troggleSelected(i)}>
+              {job.isSelected && <div className="circle"></div>}
+            </div>
+            <div className="desc">{job.desc}</div>
+            <div className="remove" onClick={() => remove(i)}>
+              删除
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="add" onClick={() => setShow(true)}>
-          新增
-        </div>
-      )}
+        ))}
+        {show ? (
+          <div className="dialog">
+            <input
+              onChange={(event) => setDesc(event.target.value)}
+              ref={inputRef}
+              placeholder="请输入任务描述"
+              onBlur={() => {
+                setTimeout(() => {
+                  setShow(false);
+                }, 0);
+              }}
+            />
+            <div className="create" onClick={add}>
+              创建
+            </div>
+          </div>
+        ) : (
+          <div className="add" onClick={() => setShow(true)}>
+            新增
+          </div>
+        )}
+      </div>
     </div>
   );
 }
