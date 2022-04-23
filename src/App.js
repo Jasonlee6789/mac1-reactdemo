@@ -3,7 +3,7 @@ import "./App.css";
 import React, { useEffect, useRef, useState } from "react";
 
 import logo from "./logo.svg";
-import randomId from "./RandomId";
+import { randomId } from "./RandomId";
 
 interface Job {
   desc: string;
@@ -65,7 +65,7 @@ function App() {
           <div className="title">进行中的任务</div>
           <div className="right">...</div>
         </div>
-        //jobs 表示任务列表，可以根据该数据遍历出整个列表
+        {/* jobs 表示任务列表，可以根据该数据遍历出整个列表 */}
         {jobs.map((job, i) => (
           <div className="job-wrapper" key={job.id}>
             <div className="selected" onClick={() => troggleSelected(i)}>
