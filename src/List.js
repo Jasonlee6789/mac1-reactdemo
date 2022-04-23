@@ -6,10 +6,10 @@ interface ListProps {
   onEditor: (i: number, value: Job) => any;
 }
 
-export default function List(props: ListProps) {
+export default function List(props) {
   const { list, onRemove, onEditor } = props;
 
-  function troggleSelected(i: number) {
+  function troggleSelected(i) {
     const job = list[i];
     onEditor(i, {
       ...job,
