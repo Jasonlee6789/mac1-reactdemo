@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import logo from "./logo.svg";
 
@@ -22,6 +22,14 @@ function App() {
   }
   //使用 useRef  获得 input 组件的引用,即ref定位到dom的输入框位置，
   const inputRef = useRef < HTMLInputElement > null;
+  //input 框在失去焦点后编辑弹窗消失,弹窗出现之后 input 能自动获取焦点的效果
+  //但是需要注意的是，input 元素是在 show 变成 true ，并且组件真实 DOM 再次渲染完成之后才能获取引用
+  useEffect(() => {
+    // show 变成 true，并且组件渲染完成之后执行
+    if (show) {
+      inputRef.current?.focus();
+    }
+  }, [show]);
   return (
     <div className="App">
       {show ? (
